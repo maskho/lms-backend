@@ -39,15 +39,28 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     let user = await User.findOne({ email }).exec();
-    if (!user) return res.status(400).send("User not found");
+    if (!user) return res.status(400).send("User not found!");
 
     const match = await comparePassword(password, user.password);
+
+    if (!match) return res.status(400).send("Wrong password!");
+
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
     user.password = undefined;
     res.cookie("token", token, { httpOnly: true });
     res.json(user);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send("Error");
+  }
+};
+
+export const logout = async (req, res) => {
+  try {
+    res.clearCookie("token");
+    return res.json({ message: "Logout success!" });
   } catch (error) {
     console.log(error);
     return res.status(400).send("Error");
