@@ -39,6 +39,10 @@ const userSchema = new Schema(
     flip_account_id: "",
     flip_seller: {},
     flipSession: {},
+    passwordResetCode: {
+      data: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );
