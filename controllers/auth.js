@@ -9,10 +9,11 @@ export const register = async (req, res) => {
     const { name, username, email, password } = req.body;
 
     if (!name) return res.status(400).send("Name is required!");
-    if (!password || password.length < 6)
+    if (!password || password.length < 6) {
       return res
         .status(400)
         .send("Password is required with min. 6 characters");
+    }
     let emailExist = await User.findOne({ email }).exec();
     let usernameExist = await User.findOne({ username }).exec();
 
