@@ -177,3 +177,72 @@ export const addModule = async (req, res) => {
     return res.status(400).send("Add module failed");
   }
 };
+
+export const update = async (req, res) => {
+  try {
+    const { slug } = req.params;
+    const course = await Course.findOne({ slug }).exec();
+
+    if (req.auth._id != course.provider) {
+      return res.status(400).send("Unauthorized");
+    }
+
+    const updated = await Course.findOneAndUpdate({ slug }, req.body, {
+      new: true,
+    }).exec();
+
+    res.json(updated);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send("Update course failed");
+  }
+};
+
+export const removeModule = async (req, res) => {
+  try {
+    const { slug, moduleId } = req.params;
+    const course = await Course.findOne({ slug }).exec();
+
+    if (req.auth._id != course.provider) {
+      return res.status(400).send("Unauthorized");
+    }
+
+    const deleted = await Course.findByIdAndUpdate(course._id, {
+      $pull: { modules: { _id: moduleId } },
+    }).exec();
+
+    res.json({ ok: true });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send("Delete module failed");
+  }
+};
+
+export const updateModule = async (req, res) => {
+  try {
+    const { slug } = req.params;
+    const { _id, title, content, video, free_preview } = req.body;
+    const course = await Course.findOne({ slug }).select("provider").exec();
+
+    if (req.auth._id != course.provider._id) {
+      return res.status(400).send("Unauthorized");
+    }
+
+    const updated = await Course.updateOne(
+      { "modules._id": _id },
+      {
+        $set: {
+          "modules.$.title": title,
+          "modules.$.content": content,
+          "modules.$.video": video,
+          "modules.$.free_preview": free_preview,
+        },
+      },
+      { new: true }
+    ).exec();
+    res.json({ ok: true });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send("Update module failed");
+  }
+};
