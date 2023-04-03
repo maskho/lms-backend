@@ -1,3 +1,4 @@
+import Course from "../models/course";
 import User from "../models/user";
 
 export const makeProvider = async (req, res) => {
@@ -28,6 +29,17 @@ export const currentProvider = async (req, res) => {
     const user = await User.findById(req.auth._id).select("-password").exec();
     if (!user.role.includes("Provider")) return res.sendStatus(403);
     return res.json({ ok: true });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const providerCourses = async (req, res) => {
+  try {
+    const courses = await Course.find({ provider: req.auth._id })
+      .sort({ createdAt: -1 })
+      .exec();
+    res.json(courses);
   } catch (error) {
     console.log(error);
   }
