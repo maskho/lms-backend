@@ -246,3 +246,50 @@ export const updateModule = async (req, res) => {
     return res.status(400).send("Update module failed");
   }
 };
+
+export const publish = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    const course = await Course.findById(courseId).select("provider").exec();
+    if (req.auth._id != course.provider._id) {
+      return res.status(400).send("Unauthorized");
+    }
+
+    const updated = await Course.findByIdAndUpdate(
+      courseId,
+      { published: true },
+      { new: true }
+    ).exec();
+    res.json(updated);
+  } catch (error) {
+    console.log(error);
+    return req.status(400).send("Publish course failed");
+  }
+};
+
+export const unpublish = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    const course = await Course.findById(courseId).select("provider").exec();
+    if (req.auth._id != course.provider._id) {
+      return res.status(400).send("Unauthorized");
+    }
+
+    const updated = await Course.findByIdAndUpdate(
+      courseId,
+      { published: false },
+      { new: true }
+    ).exec();
+    res.json(updated);
+  } catch (error) {
+    console.log(error);
+    return req.status(400).send("Unpublish course failed");
+  }
+};
+
+export const courses = async (req, res) => {
+  const allCourses = await Course.find({ published: true })
+    .populate("provider", "_id name")
+    .exec();
+  res.json(allCourses);
+};
