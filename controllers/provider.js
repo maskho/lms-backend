@@ -5,6 +5,11 @@ export const makeProvider = async (req, res) => {
   try {
     const { email } = req.body;
 
+    const admin = await User.findById(req.user._id).exec();
+    if (!admin.role.includes("Administrator")) {
+      return res.status(400).send("Unauthorized");
+    }
+
     let user = await User.findOneAndUpdate(
       { email },
       {

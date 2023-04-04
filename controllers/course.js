@@ -1,6 +1,7 @@
 import AWS from "aws-sdk";
 import Course from "../models/course";
 import User from "../models/user";
+import Completed from "../models/completed";
 import slugify from "slugify";
 import { readFileSync } from "fs";
 const nanoid = require("nanoid");
@@ -355,4 +356,63 @@ export const userCourses = async (req, res) => {
     .populate("provider", "_id name")
     .exec();
   res.json(courses);
+};
+
+export const markCompleted = async (req, res) => {
+  const { courseId, moduleId } = req.body;
+  const existing = await Completed.findOne({
+    user: req.auth._id,
+    course: courseId,
+  }).exec();
+
+  if (existing) {
+    const updated = await Completed.findOneAndUpdate(
+      {
+        user: req.auth._id,
+        course: courseId,
+      },
+      {
+        $addToSet: { modules: moduleId },
+      }
+    ).exec();
+    res.json({ ok: true });
+  } else {
+    const created = await new Completed({
+      user: req.auth._id,
+      course: courseId,
+      modules: moduleId,
+    }).save();
+    res.json({ ok: true });
+  }
+};
+
+export const listCompleted = async (req, res) => {
+  try {
+    const list = await Completed.findOne({
+      user: req.auth._id,
+      course: req.body.courseId,
+    }).exec();
+    list && res.json(list.modules);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const markIncomplete = async (req, res) => {
+  try {
+    const { courseId, moduleId } = req.body;
+
+    const updated = await Completed.findOneAndUpdate(
+      {
+        user: req.auth._id,
+        course: courseId,
+      },
+      {
+        $pull: { modules: moduleId },
+      }
+    ).exec();
+    res.json({ ok: true });
+  } catch (err) {
+    console.log(err);
+  }
 };

@@ -5,6 +5,9 @@ import {
   courses,
   create,
   freeEnrollment,
+  listCompleted,
+  markCompleted,
+  markIncomplete,
   paidEnrollment,
   publish,
   read,
@@ -50,4 +53,9 @@ router.post("/paid-enrollment/:courseId", requireSignIn, paidEnrollment);
 
 router.get("/user-courses", requireSignIn, userCourses);
 router.get("/user/course/:slug", requireSignIn, isEnrolled, read);
+
+router.post("/mark-completed", requireSignIn, markCompleted);
+router.post("/list-completed", requireSignIn, listCompleted);
+router.post("/mark-incomplete", requireSignIn, markIncomplete);
+
 module.exports = router;

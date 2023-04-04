@@ -42,7 +42,10 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     let user = await User.findOne({ email }).exec();
-    if (!user) return res.status(400).send("User not found!");
+    if (!user) {
+      user = await User.findOne({ username: email }).exec();
+      if (!user) return res.status(400).send("User not found!");
+    }
 
     const match = await comparePassword(password, user.password);
 
