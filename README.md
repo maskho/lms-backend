@@ -2,11 +2,14 @@ This is the _backend code_ for Lerero Practical Test by S.A. Khobar
 
 ## Preview
 
+API server can be accessed here: [api_server_dev](http://ec2-108-137-51-188.ap-southeast-3.compute.amazonaws.com:8000/api)
+
 You can access the API documentation in this url: [Documentation](https://documenter.getpostman.com/view/11180673/2s93RXrVQ9)
-Or you can download Json file Postman collection here: [Json file](https://file.io/wdZyDO4cyEx0)
+
+Or you can download Json file Postman collection here: [Json file](https://file.io/FLjlPlBvbSI1)
 
 ## Database dump file
-You can download the dump file for mongodb in this url: [tbd.](https://vclock.com/timer/#countdown=04:00:00&date=2023-04-04T22:39:07)
+You can download the dump file for mongodb in this url: [Dump file](https://file.io/5qCmcdE5FvyQ)
 
 ## Getting Started
 
