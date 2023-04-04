@@ -53,7 +53,7 @@ const courseSchema = new Schema(
       default: 500000,
     },
     image: {},
-    category: String,
+    keyword: String,
     published: {
       type: Boolean,
       default: false,

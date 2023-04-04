@@ -184,7 +184,7 @@ export const resetPassword = async (req, res) => {
 
     const hashedPassword = await hashPassword(newPassword);
 
-    const user = User.findOneAndUpdate(
+    const user = await User.findOneAndUpdate(
       { email, passwordResetCode: code },
       { password: hashedPassword, passwordResetCode: "" }
     ).exec();
