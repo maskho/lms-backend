@@ -1,8 +1,11 @@
 import express from "express";
 import {
   addModule,
+  checkEnrollment,
   courses,
   create,
+  freeEnrollment,
+  paidEnrollment,
   publish,
   read,
   removeImage,
@@ -13,8 +16,9 @@ import {
   updateModule,
   uploadImage,
   uploadVideo,
+  userCourses,
 } from "../controllers/course";
-import { isProvider, requireSignIn } from "../middlewares";
+import { isEnrolled, isProvider, requireSignIn } from "../middlewares";
 import ExpressFormidable from "express-formidable";
 
 const router = express.Router();
@@ -40,4 +44,10 @@ router.post("/course/module/:slug/:providerId", requireSignIn, addModule);
 router.put("/course/module/:slug/:providerId", requireSignIn, updateModule);
 router.put("/course/:slug/:moduleId", requireSignIn, removeModule);
 
+router.get("/check-enrollment/:courseId", requireSignIn, checkEnrollment);
+router.post("/free-enrollment/:courseId", requireSignIn, freeEnrollment);
+router.post("/paid-enrollment/:courseId", requireSignIn, paidEnrollment);
+
+router.get("/user-courses", requireSignIn, userCourses);
+router.get("/user/course/:slug", requireSignIn, isEnrolled, read);
 module.exports = router;

@@ -1,5 +1,6 @@
 import AWS from "aws-sdk";
 import Course from "../models/course";
+import User from "../models/user";
 import slugify from "slugify";
 import { readFileSync } from "fs";
 const nanoid = require("nanoid");
@@ -292,4 +293,66 @@ export const courses = async (req, res) => {
     .populate("provider", "_id name")
     .exec();
   res.json(allCourses);
+};
+
+export const checkEnrollment = async (req, res) => {
+  const { courseId } = req.params;
+
+  const user = await User.findById(req.auth._id).exec();
+
+  let ids = [];
+  let length = user.courses && user.courses.length;
+  for (let i = 0; i < length; i++) {
+    ids.push(user.courses[i].toString());
+  }
+  res.json({
+    status: ids.includes(courseId),
+    course: await Course.findById(courseId).exec(),
+  });
+};
+
+export const freeEnrollment = async (req, res) => {
+  try {
+    const course = await Course.findById(req.params.courseId).exec();
+    if (course.paid) return;
+
+    const result = await User.findByIdAndUpdate(
+      req.auth._id,
+      {
+        $addToSet: { courses: course._id },
+      },
+      { new: true }
+    ).exec();
+    console.log(result);
+    res.json({
+      message: "Congratulations! You have successfully enrolled",
+      course,
+    });
+  } catch (err) {
+    console.log("free enrollment err", err);
+    return res.status(400).send("Enrollment create failed");
+  }
+};
+
+export const paidEnrollment = async (req, res) => {
+  try {
+    const course = await Course.findById(req.params.courseId)
+      .populate("provider")
+      .exec();
+    if (!course.paid) return;
+
+    const fee = (course.price * 30) / 100;
+    res.json({ ok: true });
+  } catch (err) {
+    console.log("PAID ENROLLMENT ERR", err);
+    return res.status(400).send("Enrollment create failed");
+  }
+};
+
+export const userCourses = async (req, res) => {
+  const user = await User.findById(req.auth._id).exec();
+  const courses = await Course.find({ _id: { $in: user.courses } })
+    .populate("provider", "_id name")
+    .exec();
+  res.json(courses);
 };
