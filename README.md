@@ -2,10 +2,10 @@ This is the _backend code_ for Lerero Practical Test by S.A. Khobar
 
 ## Preview
 
-You can access the API documentation in this url: [tbd.](tbd.)
+You can access the API documentation in this url: [tbd.](https://vclock.com/timer/#countdown=04:00:00&date=2023-04-04T22:39:07)
 
 ## Database dump file
-You can download the dump file for mongodb in this url:[tbd.](tbd.)
+You can download the dump file for mongodb in this url: [tbd.](https://vclock.com/timer/#countdown=04:00:00&date=2023-04-04T22:39:07)
 
 ## Getting Started
 
