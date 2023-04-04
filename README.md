@@ -2,7 +2,8 @@ This is the _backend code_ for Lerero Practical Test by S.A. Khobar
 
 ## Preview
 
-You can access the API documentation in this url: [tbd.](https://vclock.com/timer/#countdown=04:00:00&date=2023-04-04T22:39:07)
+You can access the API documentation in this url: [Documentation](https://documenter.getpostman.com/view/11180673/2s93RXrVQ9)
+Or you can download Json file Postman collection here: [Json file](https://file.io/wdZyDO4cyEx0)
 
 ## Database dump file
 You can download the dump file for mongodb in this url: [tbd.](https://vclock.com/timer/#countdown=04:00:00&date=2023-04-04T22:39:07)
@@ -42,7 +43,6 @@ This backend was built with the following stack:
 - AWS SDK
 - MongoDB
 - Mongoose
-- Nodemon
 
 ### Node Version: v18.13.0
 ### NPM Version: 8.19.3
